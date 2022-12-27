@@ -16,10 +16,17 @@ export default class SomeClass extends Component {
     });
   }
 
+  counter() {
+      return (
+        <div>{ this.state.someList.length }</div>
+      );
+  }
+
   render() {
     return (
       <div>
         <div style={{ backgroundColor: this.state.color }}>Hello</div>
+        {this.counter()}
         {this.renderSomeList()}
       </div>
     );
