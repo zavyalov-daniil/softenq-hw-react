@@ -4,12 +4,14 @@ export default class SomeClass extends Component {
   constructor() {
     super();
     this.state = {
-      color: "red",
       value: '',
-      someList: [{ title: "SomeFirstElement" }, { title: "SomeSecondElement"}, { title: "SomeThirdElement" }]
+      someList: [{ title: "SomeFirstElement" }, { title: "SomeSecondElement"}, { title: "SomeThirdElement" }],
+      addCounter: 0,
+      deleteCounter: 0
     };
     this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleAddSubmit = this.handleAddSubmit.bind(this);
+    this.handleDeleteSubmit = this.handleDeleteSubmit.bind(this);
   }
 
   renderSomeListItem({ item }) {
@@ -26,9 +28,18 @@ export default class SomeClass extends Component {
     this.setState({ value: event.target.value });
   }
 
-  handleSubmit(event) {
+  handleAddSubmit(event) {
     this.setState({
-      someList: this.state.someList.concat([{ title: this.state.value }])
+      someList: this.state.someList.concat([{ title: this.state.value }]),
+      addCounter: this.state.addCounter + 1
+    });
+    event.preventDefault();
+  }
+
+  handleDeleteSubmit(event) {
+    this.setState({
+      someList: this.state.someList.slice(0, -1),
+      deleteCounter: this.state.deleteCounter + 1
     });
     event.preventDefault();
   }
@@ -42,15 +53,20 @@ export default class SomeClass extends Component {
   render() {
     return (
       <div>
-        <div style={{ backgroundColor: this.state.color }}>Hello</div>
-        {this.counter()}
-        {this.renderSomeList()}
-        <form onSubmit={this.handleSubmit}>
+        <div> Number of elements: {this.counter()} </div>
+        <div> Add counter: { this.state.addCounter } </div>
+        <div> Delete counter: { this.state.deleteCounter } </div>
+        <div style={{ margin: "20px" }}>
+          {this.renderSomeList()}
+        </div>
+        <form onSubmit={this.handleAddSubmit}>
           <label>
-            Title:
             <input type="text" value={ this.state.value } onChange={this.handleChange} />
           </label>
-          <input type="submit" value="Submit" />
+          <input type="submit" value="Add element" />
+        </form>
+        <form onSubmit={this.handleDeleteSubmit}>
+          <input type="submit" value="Delete element" />
         </form>
       </div>
     );
